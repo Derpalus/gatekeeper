@@ -544,10 +544,44 @@ class Gatekeeper
      *
      * @return boolean|\Psecio\Gatekeeper\UserModel Success/fail of token validation or User model instance
      */
-    public static function checkRememberMe()
+    public static function checkRememberMe(array $config = array())
+    {
+        $data = array_merge($_COOKIE, $config);
+        $remember = new Session\RememberMe(self::$datasource, $data);
+        return $remember->verify();
+    }
+    
+    /**
+     * Forget the "Remember Me" token information
+     *
+     * @return boolean|\Psecio\Gatekeeper\UserModel Success/fail of token validation or User model instance
+     */
+    public static function forgetMe($user)
+    {
+        if (is_string($user))
+            $user = parent::findUserByUsername($user);
+
+        $remember = new Session\RememberMe(self::$datasource, $_COOKIE, $user);
+        $token = $remember->getUserToken($user);
+        
+        return $remember->deleteToken($token->token);
+    }
+    
+    /**
+     * Checks if "Remember Me" token is expired without updating it
+     *
+     * @return boolean|\Psecio\Gatekeeper\UserModel Success/fail of token validation or User model instance
+     */
+    public static function rememberMeExpired($user)
     {
         $remember = new Session\RememberMe(self::$datasource, $_COOKIE);
-        return $remember->verify();
+        $token = $remember->getUserToken($user);
+        
+        // Check if token exists, if it doesn't, report it as expired
+        if ($token->token === null)
+            return true;
+        else
+            return $remember->isExpired($token);
     }
 
     /**
