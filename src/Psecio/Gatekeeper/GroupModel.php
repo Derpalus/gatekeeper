@@ -71,6 +71,15 @@ class GroupModel extends \Psecio\Gatekeeper\Model\Mysql
                 'method' => 'findChildrenByGroupId',
                 'local' => 'id'
             )
+        ),
+        'parents' => array(
+            'description' => 'Parent Groups',
+            'type' => 'relation',
+            'relation' => array(
+                'model' => '\\Psecio\\Gatekeeper\\GroupCollection',
+                'method' => 'findParentsByGroupId',
+                'local' => 'id'
+            )
         )
     );
 

@@ -45,4 +45,25 @@ class GroupCollection extends \Psecio\Gatekeeper\Collection\Mysql
             $this->add($group);
         }
     }
+    
+    /**
+     * Find the parents (if any) for a given group ID
+     *
+     * @param integer $groupId Group ID
+     */
+    public function findParentsByGroupId($groupId)
+    {
+        $prefix = $this->getPrefix();
+        $data = array('groupId' => $groupId);
+        $sql = 'select g.* from '.$prefix.'groups g, '.$prefix.'group_parent gp'
+            .' where g.id = gp.parent_id'
+            .' and gp.group_id = :groupId';
+
+        $results = $this->getDb()->fetch($sql, $data);
+
+        foreach ($results as $result) {
+            $group = new GroupModel($this->getDb(), $result);
+            $this->add($group);
+        }
+    }
 }
