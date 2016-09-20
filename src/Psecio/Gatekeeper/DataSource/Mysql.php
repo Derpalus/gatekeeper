@@ -103,8 +103,8 @@ class Mysql extends \Psecio\Gatekeeper\DataSource
             }
         }
 
-        if (array_key_exists('created', $data)) $data['created'] = date('Y-m-d H:i:s');
-        if (array_key_exists('updated', $data)) $data['updated'] = date('Y-m-d H:i:s');
+        if (array_key_exists('created', $properties)) $data['created'] = date('Y-m-d H:i:s');
+        if (array_key_exists('updated', $properties)) $data['updated'] = date('Y-m-d H:i:s');
 
         list($columns, $bind) = $this->setup($data);
         foreach ($columns as $index => $column) {
@@ -136,13 +136,14 @@ class Mysql extends \Psecio\Gatekeeper\DataSource
      */
     public function update(\Modler\Model $model)
     {
+        $properties = $model->getProperties();
         $data = $model->toArray();
-        //if (array_key_exists('created', $data)) $data['created'] = date('Y-m-d H:i:s');
-        if (array_key_exists('updated', $data)) $data['updated'] = date('Y-m-d H:i:s');
+        
+        //if (array_key_exists('created', $properties)) $data['created'] = date('Y-m-d H:i:s');
+        if (array_key_exists('updated', $properties)) $data['updated'] = date('Y-m-d H:i:s');
 
         list($columns, $bind) = $this->setup($data);
         $update = array();
-        $properties = $model->getProperties();
 
         foreach ($bind as $column => $name) {
             $colName = $properties[$column]['column'];
