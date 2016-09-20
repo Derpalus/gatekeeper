@@ -397,9 +397,10 @@ class UserModel extends \Psecio\Gatekeeper\Model\Mysql
      * Check to see if a user has a permission
      *
      * @param integer $permId Permission ID or name
+     * @param boolean $checkExpired also check if permission is expired
      * @return boolean Found/not found in user permission set
      */
-    public function hasPermission($permId)
+    public function hasPermission($permId, $checkExpired = false)
     {
         $find = ['user_id' => $this->id];
         if (!is_numeric($permId)) {
@@ -410,7 +411,11 @@ class UserModel extends \Psecio\Gatekeeper\Model\Mysql
 
         $perm = new UserPermissionModel($this->getDb());
         $perm = $this->getDb()->find($perm, $find);
-        return ($perm->id !== null && $perm->id === $permId) ? true : false;
+        
+        if ($checkExpired && $perm->isExpired())
+            return false;
+        else
+            return ($perm->permissionId !== null && $perm->permissionId == $permId) ? true : false;
     }
 
     /**
