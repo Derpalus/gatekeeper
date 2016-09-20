@@ -103,8 +103,8 @@ class Mysql extends \Psecio\Gatekeeper\DataSource
             }
         }
 
-        $data['created'] = date('Y-m-d H:i:s');
-        $data['updated'] = date('Y-m-d H:i:s');
+        if (array_key_exists('created', $data)) $data['created'] = date('Y-m-d H:i:s');
+        if (array_key_exists('updated', $data)) $data['updated'] = date('Y-m-d H:i:s');
 
         list($columns, $bind) = $this->setup($data);
         foreach ($columns as $index => $column) {
@@ -137,8 +137,8 @@ class Mysql extends \Psecio\Gatekeeper\DataSource
     public function update(\Modler\Model $model)
     {
         $data = $model->toArray();
-        $data['created'] = date('Y-m-d H:i:s');
-        $data['updated'] = date('Y-m-d H:i:s');
+        //if (array_key_exists('created', $data)) $data['created'] = date('Y-m-d H:i:s');
+        if (array_key_exists('updated', $data)) $data['updated'] = date('Y-m-d H:i:s');
 
         list($columns, $bind) = $this->setup($data);
         $update = array();
