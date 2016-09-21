@@ -405,6 +405,8 @@ class UserModel extends \Psecio\Gatekeeper\Model\Mysql
         $find = ['user_id' => $this->id];
         if (!is_numeric($permId)) {
             $p = Gatekeeper::findPermissionByName($permId);
+            if ($p === false)
+                return false;
             $permId = $p->id;
         }
         $find['permission_id'] = $permId;
