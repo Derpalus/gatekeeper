@@ -134,6 +134,7 @@ class Mysql extends \Psecio\Gatekeeper\DataSource
      * Update a record
      *
      * @param \Modler\Model $model Model instance
+     * @param boolean $updateDates If dates should be automatically updated
      * @return boolean Success/fail of operation
      */
     public function update(\Modler\Model $model, $updateDates = true)

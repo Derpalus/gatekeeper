@@ -16,6 +16,7 @@ class Stub extends \Psecio\Gatekeeper\DataSource
      * Create a new record with model given
      *
      * @param \Modler\Model $model Model instance
+     * @param boolean $updateDates If dates should be automatically updated
      * @return boolean Success/fail of action
      */
     public function create(\Modler\Model $model, $updateDates = true){}

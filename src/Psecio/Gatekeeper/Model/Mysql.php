@@ -98,6 +98,7 @@ class Mysql extends \Modler\Model
     /**
      * Save the current model instance (gets datasource and calls save)
      *
+     * @param boolean $updateDates If dates should be automatically updated
      * @return boolean Success/fail result of save
      */
     public function save($updateDates = true)
