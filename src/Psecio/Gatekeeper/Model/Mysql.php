@@ -100,9 +100,9 @@ class Mysql extends \Modler\Model
      *
      * @return boolean Success/fail result of save
      */
-    public function save()
+    public function save($updateDates = true)
     {
         $ds = \Psecio\Gatekeeper\Gatekeeper::getDatasource();
-        return $ds->save($this);
+        return $ds->save($this, $updateDates);
     }
 }

@@ -10,7 +10,7 @@ class Stub extends \Psecio\Gatekeeper\DataSource
      * @param \Modler\Model $model Model instance
      * @return boolean Success/fail of action
      */
-    public function save(\Modler\Model $model){}
+    public function save(\Modler\Model $model, $updateDates = true){}
 
     /**
      * Create a new record with model given
@@ -18,7 +18,7 @@ class Stub extends \Psecio\Gatekeeper\DataSource
      * @param \Modler\Model $model Model instance
      * @return boolean Success/fail of action
      */
-    public function create(\Modler\Model $model){}
+    public function create(\Modler\Model $model, $updateDates = true){}
 
     /**
      * Update the record for the given model
@@ -26,7 +26,7 @@ class Stub extends \Psecio\Gatekeeper\DataSource
      * @param \Modler\Model $model Model instance
      * @return boolean Success/fail of action
      */
-    public function update(\Modler\Model $model){}
+    public function update(\Modler\Model $model, $updateDates = true){}
 
     /**
      * Delete the record defined by the model data
