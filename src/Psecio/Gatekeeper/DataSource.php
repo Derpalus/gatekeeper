@@ -49,25 +49,28 @@ abstract class DataSource
      * Save the given model
      *
      * @param \Modler\Model $model Model instance
+     * @param boolean $updateDates If dates should be automatically updated
      * @return boolean Success/fail of action
      */
-    public abstract function save(\Modler\Model $model);
+    public abstract function save(\Modler\Model $model, $updateDates = true);
 
     /**
      * Create a new record with model given
      *
      * @param \Modler\Model $model Model instance
+     * @param boolean $updateDates If dates should be automatically updated
      * @return boolean Success/fail of action
      */
-    public abstract function create(\Modler\Model $model);
+    public abstract function create(\Modler\Model $model, $updateDates = true);
 
     /**
      * Update the record for the given model
      *
      * @param \Modler\Model $model Model instance
+     * @param boolean $updateDates If dates should be automatically updated
      * @return boolean Success/fail of action
      */
-    public abstract function update(\Modler\Model $model);
+    public abstract function update(\Modler\Model $model, $updateDates = true);
 
     /**
      * Delete the record defined by the model data
