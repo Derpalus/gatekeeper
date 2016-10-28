@@ -159,7 +159,7 @@ class Mysql extends \Psecio\Gatekeeper\DataSource
         $ok = $this->execute($sql, $data);
         
         // Must update the updated value otherwise it will still be at the previous one
-        if ($ok)
+        if ($ok && array_key_exists('updated', $properties))
             $model->updated = $data['updated'];
         return $ok;
     }
