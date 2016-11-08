@@ -8,6 +8,7 @@ class Stub extends \Psecio\Gatekeeper\DataSource
      * Save the given model
      *
      * @param \Modler\Model $model Model instance
+     * @param boolean $updateDates If dates should be automatically updated
      * @return boolean Success/fail of action
      */
     public function save(\Modler\Model $model, $updateDates = true){}
@@ -25,6 +26,7 @@ class Stub extends \Psecio\Gatekeeper\DataSource
      * Update the record for the given model
      *
      * @param \Modler\Model $model Model instance
+     * @param boolean $updateDates If dates should be automatically updated
      * @return boolean Success/fail of action
      */
     public function update(\Modler\Model $model, $updateDates = true){}

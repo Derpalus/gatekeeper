@@ -61,6 +61,7 @@ class Mysql extends \Psecio\Gatekeeper\DataSource
      * Save the model and its data (either create or update)
      *
      * @param \Modler\Model $model Model instance
+     * @param boolean $updateDates If dates should be automatically updated
      * @return boolean Success/fail of save action
      */
     public function save(\Modler\Model $model, $updateDates = true)
@@ -86,6 +87,7 @@ class Mysql extends \Psecio\Gatekeeper\DataSource
      * Create the record based on the data from the model
      *
      * @param \Modler\Model $model Model instance
+     * @param boolean $updateDates If dates should be automatically updated
      * @return boolean Success/fail of create action
      */
     public function create(\Modler\Model $model, $updateDates = true)
@@ -125,6 +127,11 @@ class Mysql extends \Psecio\Gatekeeper\DataSource
                 $instance = new $relation['relation']['model']($this);
                 $instance->create($model, $item);
             }
+            // Update dates
+            if (array_key_exists('created', $properties) && array_key_exists('created', $data))
+                $model->created = $data['created'];
+            if (array_key_exists('updated', $properties) && array_key_exists('updated', $data))
+                $model->updated = $data['updated'];
         }
 
         return $result;
@@ -159,7 +166,7 @@ class Mysql extends \Psecio\Gatekeeper\DataSource
         $ok = $this->execute($sql, $data);
         
         // Must update the updated value otherwise it will still be at the previous one
-        if ($ok && array_key_exists('updated', $properties))
+        if ($ok && array_key_exists('updated', $properties) && array_key_exists('updated', $data))
             $model->updated = $data['updated'];
         return $ok;
     }
