@@ -307,9 +307,10 @@ class UserModel extends \Psecio\Gatekeeper\Model\Mysql
      *     Also updates the user record
      *
      * @param integer $length Length of returned string
+     * @param integer $hoursTimeout number of hours before the reset code timeouts
      * @return string Geenrated code
      */
-    public function getResetPasswordCode($length = 80)
+    public function getResetPasswordCode($length = 80, $hoursTimeout = 1)
     {
         // Verify we have a user
         if ($this->id === null) {
@@ -318,7 +319,7 @@ class UserModel extends \Psecio\Gatekeeper\Model\Mysql
         // Generate a random-ish code and save it to the user record
         $code = substr(bin2hex(openssl_random_pseudo_bytes($length)), 0, $length);
         $this->resetCode = $code;
-        $this->resetCodeTimeout = date('Y-m-d H:i:s', strtotime('+1 hour'));
+        $this->resetCodeTimeout = date('Y-m-d H:i:s', time() + $hoursTimeout * 60 * 60);
         $this->getDb()->save($this);
 
         return $code;
