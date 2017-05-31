@@ -544,11 +544,11 @@ class Gatekeeper
      *
      * @return boolean|\Psecio\Gatekeeper\UserModel Success/fail of token validation or User model instance
      */
-    public static function checkRememberMe(array $config = array())
+    public static function checkRememberMe(array $config = array(), $renewToken = true)
     {
         $data = array_merge($_COOKIE, $config);
         $remember = new Session\RememberMe(self::$datasource, $data);
-        return $remember->verify();
+        return $remember->verify(null, $renewToken);
     }
     
     /**

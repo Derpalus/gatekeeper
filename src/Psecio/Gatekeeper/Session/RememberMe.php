@@ -109,9 +109,10 @@ class RememberMe
      *     Removes the old token and sets up a new one if valid
      *
      * @param \Psecio\Gatekeeper\AuthTokenModel $token Token model instance
+     * @param boolean $renewToken if token should be renewed on each verify request
      * @return boolean Pass/fail result of the validation
      */
-    public function verify(\Psecio\Gatekeeper\AuthTokenModel $token = null)
+    public function verify(\Psecio\Gatekeeper\AuthTokenModel $token = null, $renewToken = true)
     {
         if (!isset($this->data[$this->tokenName])) {
             return false;
@@ -129,14 +130,22 @@ class RememberMe
         $user = $token->user;
         $userToken = $token->token;
 
-        // Remove the token (a new one will be made later)
-        $this->datasource->delete($token);
+        if ($renewToken === true) {
+            // Remove the token (a new one will be made later)
+            $this->datasource->delete($token);
 
-        if (\Psecio\Gatekeeper\Gatekeeper::hash_equals($this->data[$this->tokenName], $token->id.':'.hash('sha256', $userToken)) === false) {
-            return false;
+            if (\Psecio\Gatekeeper\Gatekeeper::hash_equals($this->data[$this->tokenName], $token->id.':'.hash('sha256', $userToken)) === false) {
+                return false;
+            }
+
+            $this->setup($user);
+        } else {
+            if (\Psecio\Gatekeeper\Gatekeeper::hash_equals($this->data[$this->tokenName], $token->id.':'.hash('sha256', $userToken)) === false) {
+                // Login failed, delete the token to prevent further probing
+                $this->datasource->delete($token);
+                return false;
+            }
         }
-
-        $this->setup($user);
         return $user;
     }
 
