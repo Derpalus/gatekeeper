@@ -9,6 +9,12 @@ class Mysql extends \Psecio\Gatekeeper\DataSource
      * @var \PDO
      */
     protected $db;
+    
+    /**
+     * Number of rows affected from a datasource request
+     * @var integer
+     */
+    protected $numRowsAffected;
 
     /**
      * Create our PDO connection, then call parent
@@ -193,7 +199,12 @@ class Mysql extends \Psecio\Gatekeeper\DataSource
         }
 
         $sql = 'delete from '.$model->getTableName().' where '.implode(' and ', $update);
-        return $this->execute($sql, $model->toArray());
+        if (!$this->execute($sql, $model->toArray()))
+            return false;
+        
+        // If no rows were affected we failed to delete the item
+        // (probably because it was modifed in the database while we tried deleting it)
+        return $this->numRowsAffected > 0;
     }
 
     /**
@@ -286,6 +297,7 @@ class Mysql extends \Psecio\Gatekeeper\DataSource
     {
         $sth = $this->getDb()->prepare($sql);
         $result = $sth->execute($data);
+        $this->numRowsAffected = $sth->rowCount();
 
         if ($result === false) {
             $error = $sth->errorInfo();
@@ -306,6 +318,7 @@ class Mysql extends \Psecio\Gatekeeper\DataSource
     {
         $sth = $this->getDb()->prepare($sql);
         $result = $sth->execute($data);
+        $this->numRowsAffected = $sth->rowCount();
 
         if ($result === false) {
             $error = $sth->errorInfo();
