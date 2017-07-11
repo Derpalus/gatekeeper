@@ -193,13 +193,17 @@ class Mysql extends \Psecio\Gatekeeper\DataSource
         foreach ($bind as $column => $name) {
             // See if we keep to transfer it over to a column name
             if (array_key_exists($column, $properties)) {
-                $column = $properties[$column]['column'];
+                $type = $properties[$column]['type'];
+                if ($type !== 'float' && $type !== 'double') {
+                    $modelArray[$column] = $where[$column];
+                    $column = $properties[$column]['column'];
+                    $update[] = $column.' = '.$name;
+                }
             }
-            $update[] = $column.' = '.$name;
         }
 
         $sql = 'delete from '.$model->getTableName().' where '.implode(' and ', $update);
-        if (!$this->execute($sql, $model->toArray()))
+        if (!$this->execute($sql, $modelArray))
             return false;
         
         // If no rows were affected we failed to delete the item
